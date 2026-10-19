@@ -1,19 +1,73 @@
 package vn.hoidanit.springrestwithai.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
+import jakarta.persistence.Table;
+import java.time.Instant;
+
+@Entity
+
+@Table(name = "users")
 public class User {
+
+    public enum GenderEnum {
+        MALE, FEMALE, OTHER
+    }
+
+    // Đánh dấu id là khóa chính, tự động tăng (AUTO_INCREMENT)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
+
+    // Email không được null và giá trị phải là duy nhất (unique)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    // Constructor rỗng (bắt buộc cho việc parse JSON từ request body)
+    private String password;
+
+    private Integer age;
+
+    private String address;
+
+    // Lưu trữ giá trị Enum dưới dạng chuỗi (STRING) trong database thay vì số
+    // nguyên (ORDINAL)
+    @Enumerated(EnumType.STRING)
+    private GenderEnum gender;
+
+    private String avatar;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
+
+    // Constructor mặc định (no-args constructor)
     public User() {
     }
 
-    // Constructor đầy đủ
+    // Constructor 3 tham số (id, name, email)
     public User(Long id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
+    }
+
+    @PrePersist
+    public void handleBeforeCreate() {
+        this.createdAt = Instant.now();
+    }
+
+    @PreUpdate
+    public void handleBeforeUpdate() {
+        this.updatedAt = Instant.now();
     }
 
     // Getters and Setters
@@ -40,5 +94,76 @@ public class User {
     public void setEmail(String email) {
         this.email = email;
     }
-}
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public GenderEnum getGender() {
+        return gender;
+    }
+
+    public void setGender(GenderEnum gender) {
+        this.gender = gender;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", age=" + age +
+                ", address='" + address + '\'' +
+                ", gender=" + gender +
+                ", avatar='" + avatar + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+}
