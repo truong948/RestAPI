@@ -9,8 +9,11 @@ import vn.hoidanit.springrestwithai.repository.UserRepository;
 
 @Service
 public class UserService {
-    // Khởi tạo thủ công bằng new (chưa dùng Dependency Injection / @Autowired)
-    private UserRepository userRepository = new UserRepository();
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public List<User> findAll() {
         return this.userRepository.findAll();

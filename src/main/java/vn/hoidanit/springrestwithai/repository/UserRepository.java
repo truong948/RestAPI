@@ -2,8 +2,12 @@ package vn.hoidanit.springrestwithai.repository;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
 import vn.hoidanit.springrestwithai.model.User;
 
+@Repository
 public class UserRepository {
     // Khởi tạo ArrayList lưu dữ liệu trong memory
     private List<User> userList = new ArrayList<>();
@@ -61,4 +65,3 @@ public class UserRepository {
         return false;
     }
 }
-
