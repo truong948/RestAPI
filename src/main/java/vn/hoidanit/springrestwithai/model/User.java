@@ -1,0 +1,44 @@
+package vn.hoidanit.springrestwithai.model;
+
+public class User {
+    private Long id;
+    private String name;
+    private String email;
+
+    // Constructor rỗng (bắt buộc cho việc parse JSON từ request body)
+    public User() {
+    }
+
+    // Constructor đầy đủ
+    public User(Long id, String name, String email) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+}
+
