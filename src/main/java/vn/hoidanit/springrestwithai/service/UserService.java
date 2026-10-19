@@ -1,9 +1,13 @@
 package vn.hoidanit.springrestwithai.service;
 
 import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import vn.hoidanit.springrestwithai.model.User;
 import vn.hoidanit.springrestwithai.repository.UserRepository;
 
+@Service
 public class UserService {
     // Khởi tạo thủ công bằng new (chưa dùng Dependency Injection / @Autowired)
     private UserRepository userRepository = new UserRepository();
@@ -28,4 +32,3 @@ public class UserService {
         return this.userRepository.deleteById(id);
     }
 }
-

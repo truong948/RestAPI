@@ -1,6 +1,8 @@
 package vn.hoidanit.springrestwithai.controller;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,8 +18,8 @@ import vn.hoidanit.springrestwithai.service.UserService;
 @RequestMapping("/users")
 public class UserController {
 
-    // Khởi tạo thủ công bằng new (chưa dùng @Autowired)
-    private UserService userService = new UserService();
+    @Autowired
+    private UserService userService;
 
     // 1. GET /users - lấy tất cả users
     @GetMapping
@@ -53,4 +55,3 @@ public class UserController {
         return "User with id = " + id + " not found";
     }
 }
-
