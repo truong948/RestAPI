@@ -1,7 +1,10 @@
 package vn.hoidanit.springrestwithai.controller;
 
+import java.net.URI;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,37 +27,48 @@ public class UserController {
         this.userService = userService;
     }
 
-    // 1. GET /users - lấy tất cả users
+    // 1. GET /users - 200 OK
     @GetMapping
-    public List<User> getAllUsers() {
-        return this.userService.findAll();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = this.userService.findAll();
+        return ResponseEntity.ok(users);
     }
 
-    // 2. GET /users/{id} - lấy user theo id
+    // 2. GET /users/{id} - 200 OK nếu tìm thấy, 404 Not Found nếu không
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable("id") Long id) {
-        return this.userService.findById(id);
-    }
-
-    // 3. POST /users - tạo user mới
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return this.userService.save(user);
-    }
-
-    // 4. PUT /users/{id} - cập nhật user
-    @PutMapping("/{id}")
-    public User updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        return this.userService.update(id, user);
-    }
-
-    // 5. DELETE /users/{id} - xóa user
-    @DeleteMapping("/{id}")
-    public String deleteUser(@PathVariable("id") Long id) {
-        boolean isDeleted = this.userService.deleteById(id);
-        if (isDeleted) {
-            return "User with id = " + id + " deleted successfully";
+    public ResponseEntity<User> getUserById(@PathVariable("id") Long id) {
+        User user = this.userService.findById(id);
+        if (user == null) {
+            return ResponseEntity.notFound().build();
         }
-        return "User with id = " + id + " not found";
+        return ResponseEntity.ok(user);
+    }
+
+    // 3. POST /users - 201 Created với header Location
+    @PostMapping
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = this.userService.create(user);
+        URI location = URI.create("/users/" + createdUser.getId());
+        return ResponseEntity.created(location).body(createdUser);
+    }
+
+    // 4. PUT /users/{id} - 200 OK nếu tìm thấy, 404 Not Found nếu không
+    @PutMapping("/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
+        User updatedUser = this.userService.update(id, user);
+        if (updatedUser == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(updatedUser);
+    }
+
+    // 5. DELETE /users/{id} - 204 No Content nếu tìm thấy, 404 Not Found nếu không
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
+        if (!this.userService.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        this.userService.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }

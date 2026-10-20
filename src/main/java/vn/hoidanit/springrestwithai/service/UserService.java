@@ -28,6 +28,10 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
+    public User create(User user) {
+        return this.userRepository.save(user);
+    }
+
     public User update(Long id, User user) {
         User currentUser = this.findById(id);
         if (currentUser != null) {
@@ -59,5 +63,9 @@ public class UserService {
             return true;
         }
         return false;
+    }
+
+    public boolean existsById(Long id) {
+        return this.userRepository.existsById(id);
     }
 }
