@@ -9,6 +9,7 @@ import vn.hoidanit.springrestwithai.repository.UserRepository;
 
 @Service
 public class UserService {
+
     private final UserRepository userRepository;
 
     public UserService(UserRepository userRepository) {
@@ -20,7 +21,7 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return this.userRepository.findById(id);
+        return this.userRepository.findById(id).orElse(null);
     }
 
     public User save(User user) {
@@ -28,10 +29,35 @@ public class UserService {
     }
 
     public User update(Long id, User user) {
-        return this.userRepository.update(id, user);
+        User currentUser = this.findById(id);
+        if (currentUser != null) {
+            currentUser.setName(user.getName());
+            currentUser.setEmail(user.getEmail());
+            if (user.getPassword() != null) {
+                currentUser.setPassword(user.getPassword());
+            }
+            if (user.getAge() != null) {
+                currentUser.setAge(user.getAge());
+            }
+            if (user.getAddress() != null) {
+                currentUser.setAddress(user.getAddress());
+            }
+            if (user.getGender() != null) {
+                currentUser.setGender(user.getGender());
+            }
+            if (user.getAvatar() != null) {
+                currentUser.setAvatar(user.getAvatar());
+            }
+            return this.userRepository.save(currentUser);
+        }
+        return null;
     }
 
     public boolean deleteById(Long id) {
-        return this.userRepository.deleteById(id);
+        if (this.userRepository.existsById(id)) {
+            this.userRepository.deleteById(id);
+            return true;
+        }
+        return false;
     }
 }
