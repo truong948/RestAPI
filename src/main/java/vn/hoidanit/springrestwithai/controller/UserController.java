@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import vn.hoidanit.springrestwithai.model.ApiResponse;
 import vn.hoidanit.springrestwithai.model.User;
 import vn.hoidanit.springrestwithai.service.UserService;
@@ -43,7 +44,7 @@ public class UserController {
 
     // 3. POST /users - Tạo người dùng mới
     @PostMapping
-    public ResponseEntity<ApiResponse<User>> createUser(@RequestBody User user) {
+    public ResponseEntity<ApiResponse<User>> createUser(@Valid @RequestBody User user) {
         User createdUser = this.userService.create(user);
         URI location = URI.create("/users/" + createdUser.getId());
         return ResponseEntity.created(location)

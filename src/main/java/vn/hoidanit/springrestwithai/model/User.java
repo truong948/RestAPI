@@ -10,6 +10,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import java.time.Instant;
 
 @Entity
@@ -26,18 +32,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Email không được null và giá trị phải là duy nhất (unique)
+    @NotBlank(message = "Tên không được để trống")
+    @Size(min = 2, max = 100, message = "Tên phải từ 2 đến 100 ký tự")
     private String name;
 
-    // Email không được null và giá trị phải là duy nhất (unique)
-    @Column(nullable = false, unique = true)
+    @NotBlank(message = "Email không được để trống")
+    @Email(message = "Email không đúng định dạng")
     private String email;
 
+    @NotBlank(message = "Mật khẩu không được để trống")
+    @Size(min = 6, message = "Mật khẩu phải có ít nhất 6 ký tự")
     private String password;
 
+    @Min(value = 1, message = "Tuổi phải lớn hơn 0")
+    @Max(value = 150, message = "Tuổi không hợp lệ")
     private Integer age;
 
+    @Size(max = 255, message = "Địa chỉ không được quá 255 ký tự")
     private String address;
-
     // Lưu trữ giá trị Enum dưới dạng chuỗi (STRING) trong database thay vì số
     // nguyên (ORDINAL)
     @Enumerated(EnumType.STRING)
