@@ -2,6 +2,8 @@ package vn.hoidanit.springrestwithai.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     private final String resourceName;
     private final String fieldName;
     private final Object fieldValue;
@@ -25,4 +27,3 @@ public class ResourceNotFoundException extends RuntimeException {
         return fieldValue;
     }
 }
-
